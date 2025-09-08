@@ -18,10 +18,14 @@ public class CustomermanagementApplication {
 	}
 
 
-    @GetMapping("/welcome")
+    @GetMapping("/")
     public String welcome(){
         return "server running on the port 8099";
     }
+
+
+
+
 
 
 
