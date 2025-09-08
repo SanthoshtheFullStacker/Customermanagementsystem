@@ -1,16 +1,27 @@
 package com.example.Customermanagement.auth;
 
+import com.fasterxml.jackson.databind.annotation.NoClass;
+import org.hibernate.mapping.Collection;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity  /* usage of this annotate method this config particulary spring security */
 public class Securityconfig {
+
+
+    public final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
 
     @Bean /* to mention below function should be called as a configuration when server starts */
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -41,6 +52,25 @@ public class Securityconfig {
 
         return httpSecurity.build(); /* it will disable everything provided by a spring security ( you will get a forbidden error )*/
     }
+
+//    now it will only the users that we mentioned in security file we want to enable a
+//    multiple users
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        UserDetails user1 = User.builder()
+                .username("uta")
+                .password(bCryptPasswordEncoder.encode("{bcrypt}u@123")) // ✅ encode with BCrypt
+                .roles("USER")
+                .build();
+
+        System.out.println("password"+user1.getPassword());
+
+        return new InMemoryUserDetailsManager(user1);
+    }
+
+
+
 
 
 
