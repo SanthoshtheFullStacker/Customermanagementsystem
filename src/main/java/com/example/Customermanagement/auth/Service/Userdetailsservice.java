@@ -30,8 +30,6 @@ public class Userdetailsservice implements UserDetailsService {
 
             if(userdata.isPresent()){
 
-
-
                 return new Userdetails(userdata.get());
 
             }
@@ -40,6 +38,4 @@ public class Userdetailsservice implements UserDetailsService {
 
         throw new UsernameNotFoundException("username not found");
     }
-
-
 }

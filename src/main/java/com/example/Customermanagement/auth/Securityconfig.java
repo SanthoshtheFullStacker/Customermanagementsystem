@@ -1,5 +1,6 @@
 package com.example.Customermanagement.auth;
 
+import com.example.Customermanagement.auth.Authfilter.Jwtfilter;
 import com.example.Customermanagement.auth.Service.Userdetailsservice;
 import com.fasterxml.jackson.databind.annotation.NoClass;
 import org.hibernate.mapping.Collection;
@@ -23,6 +24,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity  /* usage of this annotate method this config particulary spring security */
@@ -32,6 +34,9 @@ public class Securityconfig {
 
     @Autowired
     public Userdetailsservice userdetailsservice;
+
+    @Autowired
+    public Jwtfilter jwtfilter;
 
 
 
@@ -52,7 +57,7 @@ public class Securityconfig {
          */
 
         httpSecurity.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/auth/login","/auth/register","/**").permitAll().anyRequest().authenticated());
+                .requestMatchers("/auth/login","/auth/register").permitAll().anyRequest().authenticated());
 
         /* to make it work thorugh insomnia basic auth we are enabling a httpbasic */
 
@@ -63,6 +68,8 @@ public class Securityconfig {
         httpSecurity.formLogin(Customizer.withDefaults());
 
         httpSecurity.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        httpSecurity.addFilterBefore(jwtfilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build(); /* it will disable everything provided by a spring security ( you will get a forbidden error )*/
     }

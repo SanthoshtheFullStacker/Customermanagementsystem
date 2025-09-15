@@ -16,6 +16,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -31,6 +33,9 @@ public class Authserviceimpl implements Authservice {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JWTserviceimpl jwTserviceimpl;
 
 
 
@@ -55,9 +60,13 @@ public class Authserviceimpl implements Authservice {
 
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(usermodelrequest.getUsername(),usermodelrequest.getPassword()));
 
+            Map<String, String> tokenres = new HashMap<>();
+
             if(authentication.isAuthenticated()){
 
-                return SuccessreponseDTO.isSuccessConsole(200,"User Logged In Successfully",null);
+                tokenres.put("token",jwTserviceimpl.generateToken(userdatabbyusername.get()));
+
+                return SuccessreponseDTO.isSuccessConsole(200,"User Logged In Successfully",tokenres);
 
             }
 
