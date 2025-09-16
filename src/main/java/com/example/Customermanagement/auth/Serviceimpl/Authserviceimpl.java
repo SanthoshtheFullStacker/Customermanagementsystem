@@ -7,6 +7,8 @@ import com.example.Customermanagement.auth.Model.Usermodel;
 import com.example.Customermanagement.auth.Model.Userroles;
 import com.example.Customermanagement.auth.Repository.Userrepository;
 import com.example.Customermanagement.auth.Service.Authservice;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +26,7 @@ import java.util.Optional;
 public class Authserviceimpl implements Authservice {
 
 
+    public static final Logger logger = LoggerFactory.getLogger(Authserviceimpl.class);
 
 
     public PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
@@ -42,6 +45,8 @@ public class Authserviceimpl implements Authservice {
     @Override
     public ResponseEntity<Object> login(Usermodelrequest usermodelrequest) {
         try{
+
+            logger.info("*********** Login API Called ******************");
 
             if(usermodelrequest.getPassword() == null || usermodelrequest.getUsername() == null){
 
@@ -80,6 +85,10 @@ public class Authserviceimpl implements Authservice {
     @Override
     public ResponseEntity<Object> register(Usermodelrequest usermodelrequest) {
         try{
+
+            logger.info("*********** register service Called ******************");
+
+
             if(usermodelrequest.getPassword() == null || usermodelrequest.getPassword() == null){
                 return ErrorresponseDTO.isErrorConsole(404,"Required Values Not Found");
             }
