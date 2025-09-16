@@ -59,7 +59,7 @@ public class Securityconfig {
          */
 
         httpSecurity.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/auth/login","/auth/register").permitAll().anyRequest().authenticated());
+                .requestMatchers("/auth/login","/auth/register","/actuator/health","/actuator/metrics","/actuator/info","/actuator/loggers").permitAll().anyRequest().authenticated());
 
         /* to make it work thorugh insomnia basic auth we are enabling a httpbasic */
 
